@@ -1,170 +1,189 @@
-// CLICK EVENTS
-
-$(document).on("click", "#start", function () {
-    game.start();
-});
-
-
-$(document).on("click", "#done", function () {
-    game.done();
-});
-
-var panel = $("#quiz-area");
+var panel = $("#question-area");
+var countStartNumber = 30;
 
 // Questions and Answers
 
 var questions = [{
     question: "What’s the name of Batman’s loyal butler?",
     choices: ["Norman Osborn", "James Stevens", "Alfred Pennyworth", "Otis"],
-    correctAnswer: "Alfred Pennyworth"
-}, {
+    correctAnswer: "Alfred Pennyworth",
+    image: "assets/images/Alfred_Pennyworth.jpg"
+},
+{
 
     question: "Who plays the role of Rachel Dawes in the Dark Knight?",
     choices: ["Katie Holmes", "Liv Tyler", "Maggie Gyllenhaal", "Jennifer Connelly"],
-    correctAnswer: "Maggie Gyllenhaal"
-}, {
+    correctAnswer: "Maggie Gyllenhaal",
+    image: "assets/images/Maggie_G.jpg"
+}, 
+{
 
     question: "Who played the role of Batgirl in Batman and Robin?",
     choices: ["Drew Barrymore", "Kirsten Dunst", "Alicia Silverstone", "Liv Tyler"],
-    correctAnswer: "Alicia Silverstone"
-}, {
+    correctAnswer: "Alicia Silverstone",
+    image: "assets/images/Alicia_Silverstone.jpg"
+},
+{
 
     question: "Who directed Batman Begins and The Dark Knight?",
     choices: ["Tim Burton", "Terry Gilliam", "Christopher Nolan", "David Lynch"],
-    correctAnswer: "Christopher Nolan"
-}, {
+    correctAnswer: "Christopher Nolan",
+    image:"assets/images/Christopher_Nolan.jpg"
+},
+{
 
     question: '"The Bat, the Cat, the Penquin" is the tagline from which Batman movie?',
     choices: ["Batman and Robin", "Batman Forever", "Batman Returns", "Batman"],
-    correctAnswer: "Batman Returns"
-}, {
+    correctAnswer: "Batman Returns",
+    image: "assets/images/Batman_returns.jpg"
+},
+{
 
     question: "What’s the name of the city where Batman lives?",
     choices: ["Gotham City", "Metropolis", "Empire City", "Coruscant"],
-    correctAnswer: "Gotham City"
+    correctAnswer: "Gotham City",
+    image: "assets/images/Gotham.jpg"
 }];
 
+// Test
 console.log(questions);
 
-//Variable for the timer
-
+// Timer Variable
 var timer;
 
 var game = {
 
-    correct: 0,
-    incorrect: 0,
-    counter: 45,
+  questions: questions,
+  currentQuestion: 0,
+  counter: countStartNumber,
+  correct: 0,
+  incorrect: 0,
 
-    countdown: function () {
-        game.counter--;
-        $("#counter-number").html(game.counter);
-        if (game.counter === 0) {
-            console.log("TIME UP");
-            game.done();
-        }
-    },
-
-    start: function () {
-        timer = setInterval(game.countdown, 1000);
-
-        $("#sub-wrapper").prepend("<h2>Time Remaining: <span id='counter-number'>120</span> Seconds</h2>");
-
-        $("#start").remove();
-
-        for (var i = 0; i < questions.length; i++) {
-            panel.append("<h2>" + questions[i].question + "</h2>");
-            for (var j = 0; j < questions[i].answers.length; j++) {
-                panel.append("<input type='radio' name='question-" + i +
-                    "' value='" + questions[i].answers[j] + "''>" + questions[i].answers[j]);
-            }
-        }
-
-        panel.append("<button id='done'>Done</button>");
-    },
-
-    done: function () {
-
-        $.each($("input[name='question-0']:checked"), function () {
-            if ($(this).val() === questions[0].correctAnswer) {
-                game.correct++;
-            }
-            else {
-                game.incorrect++;
-            }
-        });
-
-        $.each($("input[name='question-1']:checked"), function () {
-            if ($(this).val() === questions[1].correctAnswer) {
-                game.correct++;
-            }
-            else {
-                game.incorrect++;
-            }
-        });
-
-        $.each($("input[name='question-2']:checked"), function () {
-            if ($(this).val() === questions[2].correctAnswer) {
-                game.correct++;
-            }
-            else {
-                game.incorrect++;
-            }
-        });
-
-        $.each($("input[name='question-3']:checked"), function () {
-            if ($(this).val() === questions[3].correctAnswer) {
-                game.correct++;
-            }
-            else {
-                game.incorrect++;
-            }
-        });
-
-        $.each($("input[name='question-4']:checked"), function () {
-            if ($(this).val() === questions[4].correctAnswer) {
-                game.correct++;
-            }
-            else {
-                game.incorrect++;
-            }
-        });
-
-        $.each($("input[name='question-5']:checked"), function () {
-            if ($(this).val() === questions[5].correctAnswer) {
-                game.correct++;
-            }
-            else {
-                game.incorrect++;
-            }
-        });
-
-        $.each($("input[name='question-6']:checked"), function () {
-            if ($(this).val() === questions[6].correctAnswer) {
-                game.correct++;
-            }
-            else {
-                game.incorrect++;
-            }
-        });
-
-
-        this.result();
-
-    },
-
-    result: function () {
-
-        clearInterval(timer);
-
-        $("#sub-wrapper h2").remove();
-
-        panel.html("<h2>All Done!</h2>");
-        panel.append("<h3>Correct Answers: " + this.correct + "</h3>");
-        panel.append("<h3>Incorrect Answers: " + this.incorrect + "</h3>");
-        panel.append("<h3>Unanswered: " + (questions.length - (this.incorrect + this.correct)) + "</h3>");
+  countdown: function() {
+    game.counter--;
+    $("#counter-number").html(game.counter);
+    if (game.counter === 0) {
+      console.log("TIME UP");
+      game.timeUp();
     }
+  },
+
+  loadQuestion: function() {
+
+    timer = setInterval(game.countdown, 1000);
+
+    panel.html("<h2>" + questions[this.currentQuestion].question + "</h2>");
+
+    for (var i = 0; i < questions[this.currentQuestion].choices.length; i++) {
+      panel.append("<button class='answer-button' id='button' data-name='" + questions[this.currentQuestion].choices[i]
+      + "'>" + questions[this.currentQuestion].choices[i] + "</button>");
+    }
+  },
+
+  nextQuestion: function() {
+    game.counter = countStartNumber;
+    $("#counter-number").html(game.counter);
+    game.currentQuestion++;
+    game.loadQuestion();
+  },
+
+  timeUp: function() {
+
+    clearInterval(timer);
+
+    $("#counter-number").html(game.counter);
+
+    panel.html("<h2>Out of Time!</h2>");
+    panel.append("<h3>The Correct Answer was: " + questions[this.currentQuestion].correctAnswer);
+    panel.append("<img src='" + questions[this.currentQuestion].image + "' />");
+
+    if (game.currentQuestion === questions.length - 1) {
+      setTimeout(game.results, 3 * 1000);
+    }
+    else {
+      setTimeout(game.nextQuestion, 3 * 1000);
+    }
+  },
+
+  results: function() {
+
+    clearInterval(timer);
+
+    panel.html("<h2>All done, heres how you did!</h2>");
+
+    $("#counter-number").html(game.counter);
+
+    panel.append("<h3>Correct Answers: " + game.correct + "</h3>");
+    panel.append("<h3>Incorrect Answers: " + game.incorrect + "</h3>");
+    panel.append("<h3>Unanswered: " + (questions.length - (game.incorrect + game.correct)) + "</h3>");
+    panel.append("<br><button id='start-over'>Start Over?</button>");
+  },
+
+  clicked: function(e) {
+    clearInterval(timer);
+    if ($(e.target).attr("data-name") === questions[this.currentQuestion].correctAnswer) {
+      this.answeredCorrectly();
+    }
+    else {
+      this.answeredIncorrectly();
+    }
+  },
+
+  answeredIncorrectly: function() {
+
+    game.incorrect++;
+
+    clearInterval(timer);
+
+    panel.html("<h2>Nope!</h2>");
+    panel.append("<h3>The Correct Answer was: " + questions[game.currentQuestion].correctAnswer + "</h3>");
+    panel.append("<img src='" + questions[game.currentQuestion].image + "' />");
+
+    if (game.currentQuestion === questions.length - 1) {
+      setTimeout(game.results, 3 * 1000);
+    }
+    else {
+      setTimeout(game.nextQuestion, 3 * 1000);
+    }
+  },
+
+  answeredCorrectly: function() {
+
+    clearInterval(timer);
+
+    game.correct++;
+
+    panel.html("<h2>Correct!</h2>");
+    panel.append("<img src='" + questions[game.currentQuestion].image + "' />");
+
+    if (game.currentQuestion === questions.length - 1) {
+      setTimeout(game.results, 3 * 1000);
+    }
+    else {
+      setTimeout(game.nextQuestion, 3 * 1000);
+    }
+  },
+
+  reset: function() {
+    this.currentQuestion = 0;
+    this.counter = countStartNumber;
+    this.correct = 0;
+    this.incorrect = 0;
+    this.loadQuestion();
+  }
 };
 
+// CLICK EVENTS
 
+$(document).on("click", "#start-over", function() {
+  game.reset();
+});
 
+$(document).on("click", ".answer-button", function(e) {
+  game.clicked(e);
+});
+
+$(document).on("click", "#start", function() {
+  $("#sub-wrapper").prepend("<h2>Time Remaining: <span id='counter-number'>30</span> Seconds</h2>");
+  game.loadQuestion();
+});
