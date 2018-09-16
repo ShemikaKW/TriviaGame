@@ -5,13 +5,13 @@ body {
 
 body{
 	text-align: center;
-	background-image: url("http://epicwallpaperz.com/wallpaper-hd/batman-logo-wallpapers-desktop-background-On-wallpaper-hd.jpg");
+	background-image: url("https://wallpapertag.com/wallpaper/full/f/3/1/923020-jim-lee-batman-wallpaper-1920x1080-for-lockscreen.jpg");
 	background-size: cover;
 }
 
 #wrapper {
 	width: 960px;
-	height: 95%;
+	height: auto;
 	box-sizing: border-box;
 	margin: 2.5% auto;
 	background-color: transparent;
@@ -42,14 +42,14 @@ body{
 	font-family: Taviraj;
 	font-size: 6.5em;
 	font-weight: bold;
-	color: gold;
+	color: rgb(253, 223, 51);
 
   }
   
   h2 {
 	margin-bottom: 25px;
 	font-size: 35px;
-	color: goldenrod;
+	
   }
   
   h3 {
@@ -70,6 +70,6 @@ body{
 
   #question-area{
 	  font-family: Philospher;
-	  color: yellow;
+	  color: rgb(253, 223, 51);
   }
   
